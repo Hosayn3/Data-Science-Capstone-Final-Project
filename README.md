@@ -1,58 +1,52 @@
-# Data-Science-Capstone-Final-Project
+---
+title: "Dta Science Capstone Final Project"
+author: "Mohammed Hosayn"
+date: "15.11.2021"
+output: 
+  html_document: 
+    keep_md: yes
+---
 
-This project was the final part of a 10 course Data Science track by Johns Hopkins University on Coursera. It was done as an industry partnership with SwiftKey. The job was to clean and analyze a large corpus of unstructured text and build a word prediction model and use it in a web application.
+### Summary
 
-More info here: (http://rpubs.com/akselix/word_prediction)
+This package, submitted in partial fulfillment of the requirements of the Coursera course, "Data Science Capstone", contains functions for an auto-completion model that predicts the next word to be typed based on a word or phrase previously typed.  The presentation can be found at  and a demonstration at https://hosayn.shinyapps.io/caps1/?_ga=2.61634860.181200586.1636361161-814300781.1629639865
+Auto-completion is a common function on mobile devices. As a user types, an auto-completion function presents that user with possible completions to the current word being typed or probable words that could follow the current word or phrase after it is typed. The package "wordprediction" provides the latter function.
 
-# Overview
-The goal of this exercise is to create a product to highlight the prediction algorithm that I have built and to provide an interface that can be accessed by others. For this project must submit:
+### Data
 
-A Shiny app that takes as input a phrase (multiple words) in a text box input and outputs a prediction of the next word.
-A slide deck consisting of no more than 5 slides created with R Studio Presenter (https://support.rstudio.com/hc/en-us/articles/200486468-Authoring-R-Presentations) pitching your algorithm and app as if you were presenting to your boss or an investor. This repository contains the ui.R and server.R files for the developed Shiny Application as well as the RStudio Presenter files for the Data Science Capstone Course Project.
-About Data
-The corpora are collected from publicly available sources by a web crawler. The crawler checks for language, so as to mainly get texts consisting of the desired language*.
+#### Data File
 
-Each entry is tagged with it's date of publication. Where user comments are included they will be tagged with the date of the main entry.
+In order to build a function that can provide word-prediction, a predictive model is needed.  Such models use known content to predict unknown content.  For this package, that content comes from the HC Corpora collection, which is "a collection of corpora for various languages freely available to download" (Christensen, n.d.). The version used was obtained from an archive maintained at Coursera (Leek, Peng, Caffo, & Johns Hopkins University, n.d.).  The file included three text document collections, blogs, news feeds, and tweets, in four languages, German, English, Finnish, and Russian, of which only the English collections were used.  The files were too large to be manipulated using a home computer (e.g., the downloaded ZIP file was 575 MB).  Therefore, 1000 lines were randomly sampled from each collection using a Mac OS X (Version x86_64-apple-darwin13.4.0) terminal application before loading for analysis in RStudio (Version 0.99.892) running the R statistical programming language (Version 3.2.3).
 
-Each entry is tagged with the type of entry, based on the type of website it is collected from (e.g. newspaper or personal blog) If possible, each entry is tagged with one or more subjects based on the title or keywords of the entry (e.g. if the entry comes from the sports section of a newspaper it will be tagged with "sports" subject).In many cases it's not feasible to tag the entries (for example, it's not really practical to tag each individual Twitter entry, though I've got some ideas which might be implemented in the future) or no subject is found by the automated process, in which case the entry is tagged with a '0'.
+#### Data Structure
 
-To save space, the subject and type is given as a numerical code.
+This package uses the data stuctures described in Feinerer, Hornik, and Meyer (2008) from the Text Mining Package (Version 0.6-2; Feinerer, Hornik, & Artifex Software, Inc., 2015) "tm".  In these structures, text document collections are organized into corpora, the basic objects to be manipulated by the word-prediction function.  Accordingly, the HC Corpora data file were loaded as tm corpora.
 
-Once the raw corpus has been collected, it is parsed further, to remove duplicate entries and split into individual lines. Approximately 50% of each entry is then deleted. Since you cannot fully recreate any entries, the entries are anonymised and this is a non-profit venture I believe that it would fall under Fair Use.
+#### Data Cleaning
 
-You may still find lines of entirely different languages in the corpus. There are 2 main reasons for that:1. Similar languages. Some languages are very similar, and the automatic language checker could therefore erroneously accept the foreign language text.2. "Embedded" foreign languages. While a text may be mainly in the desired language there may be parts of it in another language. Since the text is then split up into individual lines, it is possible to see entire lines written in a foreign language.Whereas number 1 is just an out-and-out error, I think number 2 is actually desirable, as it will give a picture of when foreign language is used within the main language.
-Content archived from heliohost.org on September 30, 2016 and retrieved via Wayback Machine on April 24, 2017. https://web-beta.archive.org/web/20160930083655/http://www.corpora.heliohost.org/aboutcorpus.html
+Data cleaning involves transforming the raw text in the corpus into a format more suitable for automated manipulation.  The tm package provides numerous functions for such transformations (see Feinerer et al., 2008, p. 9).  For this package, the texts were converted to lower case, stripped of whitespace, and common stopwords (i.e., words so common that they contain little information; see Feinerer et al., 2008, pp. 25-26) were removed.  From the cleaned English corpus, a term-document matrix (TDM) was created, which is a matrix of words or phrases and their frequencies in a corpus.
 
-Note : At this Task I use only English Text
+### Prediction Model
 
-Review criteria
-Data Product
-Does the link lead to a Shiny app with a text input box that is running on shinyapps.io?
-Does the app load to the point where it can accept input?
-When you type a phrase in the input box do you get a prediction of a single word after pressing submit and/or a suitable delay for the model to compute the answer?
-Put five phrases drawn from Twitter or news articles in English leaving out the last word. Did it give a prediction for every one?
-Slide Deck
-Does the link lead to a 5 slide deck on R Pubs?
-Does the slide deck contain a description of the algorithm used to make the prediction?
-Does the slide deck describe the app, give instructions, and describe how it functions?
-How would you describe the experience of using this app?
-Does the app present a novel approach and/or is particularly well done?
-Would you hire this person for your own data science startup company?
-The developed Shiny app for the the assignment is available here
-The pitch presentation is available here
-Runbook
-The source coude files and presentation files are available on this GitHub repo
+According to Wikipedia (N-gram, n.d.), "an *n*-gram is a contiguous sequence of n items from a given sequence of text or speech."  This package takes a key word or phrase, matches that key to the most frequent *n*-1 term found in a TDM of *n*-word terms, and returns the *n*th word of that item.
 
-Shiny app
+Of course, not all possible words or phrases exist in the corpus from which the TDM was derived.  For this reason, a simplified Katz's back-off model is used, which backs off to smaller *n*-grams when a key is not found in the larger *n*-gram.  The maximum *n*-gram handled is a trigram.  The word returned is the match found in the largest *n*-gram where the key is found.  When the key is not found in the unigram, the most common word in the corpus "will" is returned.  This function is demonstrated using a Shiny app hosted on shinyapps.io at [https://michaelgill1969.shinyapps.io/word-prediction/](https://michaelgill1969.shinyapps.io/word-prediction/).
 
-Data is preloaded into (corpus.RData)
+### Conclusion
 
-getting-cleaning data.R
+This report has shown features the R package "wordprediction".  It was designed using samples of 1000 words each from a corpus of collections English words.  As shown in a demonstration, all phrases and words submitted to the function "katz_backoff_model" result in a prediction in the form of a single word returned.
 
-Contains functions used for load, preprocess, and save data
-./shiny/server.R
+### References
 
-Contains the server side functions
-./shiny/ui.R
+Christensen, H. (n.d.). *HC Corpora*. Retrieved from [http://www.corpora.heliohost.org](http://www.corpora.heliohost.org)
 
-Handles the input/output
+Feinerer, I., Hornik, K., & Artifex Software, Inc. (2015, July 2). Text Mining Package [Computer software]. Retrieved from [http://tm.r-forge.r-project.org](http://tm.r-forge.r-project.org)
+
+Feinerer, I., Hornik, K., & Meyer, D. (2008). *Text mining infrastructure in R. Journal of Statistical Software, 25*(5), 1–54. [http://doi.org/citeulike-article-id:2842334](http://doi.org/citeulike-article-id:2842334)
+
+Leek, J., Peng, R., Caffo, B., & Johns Hopkins University (n.d.). *Data Science Capstone*, Coursera. Retrieved from [https://www.coursera.org/learn/data-science-project/](https://www.coursera.org/learn/data-science-project/)
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
