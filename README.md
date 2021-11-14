@@ -6,7 +6,7 @@ output:
   html_document: 
     keep_md: yes
 ---
-
+This project was the final part of a 10 course Data Science track by Johns Hopkins University on Coursera. It was done as an industry partnership with SwiftKey. The job was to clean and analyze a large corpus of unstructured text and build a word prediction model and use it in a web application.
 ### Summary
 
 This package, submitted in partial fulfillment of the requirements of the Coursera course, "Data Science Capstone", contains functions for an auto-completion model that predicts the next word to be typed based on a word or phrase previously typed.  The presentation can be found at https://rpubs.com/Hosayn111/832737   and a demonstration at https://hosayn.shinyapps.io/caps1/?_ga=2.61634860.181200586.1636361161-814300781.1629639865
