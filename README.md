@@ -12,7 +12,11 @@ output:
 This package, submitted in partial fulfillment of the requirements of the Coursera course, "Data Science Capstone", contains functions for an auto-completion model that predicts the next word to be typed based on a word or phrase previously typed.  The presentation can be found at https://rpubs.com/Hosayn111/832737   and a demonstration at https://hosayn.shinyapps.io/caps1/?_ga=2.61634860.181200586.1636361161-814300781.1629639865
 Auto-completion is a common function on mobile devices. As a user types, an auto-completion function presents that user with possible completions to the current word being typed or probable words that could follow the current word or phrase after it is typed. The package "wordprediction" provides the latter function.
 
-### Data
+### Overview
+The goal of this exercise is to create a product to highlight the prediction algorithm that I have built and to provide an interface that can be accessed by others. For this project must submit:
+
+A Shiny app that takes as input a phrase (multiple words) in a text box input and outputs a prediction of the next word.
+A slide deck consisting of no more than 5 slides created with R Studio Presenter (https://support.rstudio.com/hc/en-us/articles/200486468-Authoring-R-Presentations) pitching your algorithm and app as if you were presenting to your boss or an investor. This repository contains the ui.R and server.R files for the developed Shiny Application as well as the RStudio Presenter files for the Data Science Capstone Course Project.
 
 #### Data File
 
